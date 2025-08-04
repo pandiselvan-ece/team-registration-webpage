@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 app.secret_key = 'raam_secret'
 
-problem_statements = problem_statements = [
+problem_statements = [
     "AI Therapist for Daily Mood Logging and Support",
     "Stress Level Analyzer from Daily Journal Entries",
     "Dream Journal to Story Generator",
@@ -49,7 +49,6 @@ problem_statements = problem_statements = [
     "AI Companion Bot for Seniors with Face Recognition"
 ]
 
-
 @app.route('/')
 def index():
     taken_teams = set()
@@ -64,7 +63,9 @@ def index():
         'form.html',
         problems=problem_statements,
         taken_teams=taken_teams,
-        taken_problems=taken_problems
+        taken_problems=taken_problems,
+        error=None,
+        prev_data={}
     )
 
 @app.route('/submit', methods=['POST'])
@@ -77,20 +78,53 @@ def submit():
     name3 = request.form['name3']
     regno3 = request.form['regno3']
     problem = request.form['problem']
+    custom_problem = request.form.get('custom_problem', '').strip()
 
-    # Check if 'Other' selected, get the textarea input
-    if problem == 'Other':
-        custom_problem = request.form.get('custom_problem', '').strip()
-        if not custom_problem:
-            return "<h3>Error: You selected 'Other' but did not enter a problem statement.<br><a href='/'>Go Back</a></h3>"
-        problem = custom_problem
+    actual_problem = custom_problem if problem == 'Other' else problem
+
+    taken_teams = set()
+    taken_problems = set()
+    if os.path.isfile('submissions.csv'):
+        with open('submissions.csv', newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                taken_teams.add(row['Team Number'])
+                taken_problems.add(row['Problem Statement'])
+
+    error = None
+    if problem == 'Other' and not custom_problem:
+        error = "You selected 'Other' but did not enter a problem statement."
+    elif team_number in taken_teams:
+        error = f"Team number {team_number} is already registered."
+    elif actual_problem in taken_problems:
+        error = f"Problem statement '{actual_problem}' is already taken."
+
+    if error:
+        return render_template(
+            'form.html',
+            problems=problem_statements,
+            taken_teams=taken_teams,
+            taken_problems=taken_problems,
+            error=error,
+            prev_data={
+                'teamNumber': team_number,
+                'name1': name1,
+                'regno1': regno1,
+                'name2': name2,
+                'regno2': regno2,
+                'name3': name3,
+                'regno3': regno3,
+                'problem': '',  # Clear problem because invalid or duplicate
+                'custom_problem': ''
+            }
+        )
 
     data = [
         team_number,
         name1, regno1,
         name2, regno2,
         name3, regno3,
-        problem
+        actual_problem
     ]
 
     file_exists = os.path.isfile('submissions.csv')
@@ -99,6 +133,7 @@ def submit():
         if not file_exists:
             writer.writerow(['Team Number', 'Name1', 'RegNo1', 'Name2', 'RegNo2', 'Name3', 'RegNo3', 'Problem Statement'])
         writer.writerow(data)
+
     return redirect(url_for('success'))
 
 @app.route('/success')
@@ -107,6 +142,7 @@ def success():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         with open('data.json') as f:
             users = json.load(f)
@@ -115,8 +151,8 @@ def login():
         if uname == users['admin']['username'] and pwd == users['admin']['password']:
             session['logged_in'] = True
             return redirect(url_for('admin'))
-        return "<h3>Login failed. Try again.</h3>"
-    return render_template('login.html')
+        error = "Invalid username or password. Please try again."
+    return render_template('login.html', error=error)
 
 @app.route('/admin')
 def admin():
@@ -153,7 +189,6 @@ def clear():
     if os.path.exists("submissions.csv"):
         os.remove("submissions.csv")
     return redirect(url_for('admin'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
