@@ -6,17 +6,49 @@ import json
 app = Flask(__name__)
 app.secret_key = 'raam_secret'
 
-problem_statements = [
-    "Smart Home Automation", "AI Chatbot for College", "E-Waste Management System",
-    "IoT-based Health Monitor", "Campus Navigation App", "Virtual Lab for Physics",
-    "Library Book Finder", "Women Safety Tracker", "AI Resume Builder",
-    "Attendance via Face Recognition", "Smart Dustbin System", "Student Feedback Analyzer",
-    "Vehicle Number Plate Detection", "Online Voting System", "Emergency Alert System",
-    "Energy Consumption Optimizer", "Anti-Theft IoT Alarm", "Food Waste Tracker",
-    "Crowd Density Monitor", "AI Career Guide", "Blood Donation Matcher",
-    "Disaster Warning System", "College Event Scheduler", "Online Bus Tracker",
-    "Smart Irrigation System"
+problem_statements = problem_statements = [
+    "AI Therapist for Daily Mood Logging and Support",
+    "Stress Level Analyzer from Daily Journal Entries",
+    "Dream Journal to Story Generator",
+    "Mental Health Checker from Handwriting Samples",
+    "Fashion Assistant from Image Input",
+    "Abnormality Detector in X-ray or CT Images",
+    "Emotion Recognition from Short Video Clips",
+    "Vehicle Type and Plate Recognition from CCTV Footage",
+    "Trash Classifier: Sort Recyclables from Waste Images",
+    "Outfit Matcher from Wardrobe Photo",
+    "Video Summary Generator for Surveillance Footage",
+    "Chemistry Subject Tutor Chatbot",
+    "Flowchart to Python Code Generator",
+    "Interactive Comic Book Creator for Kids",
+    "Quiz Generator from Any PDF Textbook",
+    "Food Ingredient to Recipe Generator",
+    "Calorie Estimator from Meal Image",
+    "Generate Song Lyrics Based on Mood and Genre",
+    "Rap Generator from User Voice Input",
+    "Story Completion from a Given Prompt and Style",
+    "Sketch-to-Story Generator",
+    "Custom Voice AI Chatbot That Mimics Celebrity Voices",
+    "Artwork Generator from User's Doodle",
+    "Interior Design Planner from Room Photo",
+    "Virtual Try-On for Jewelry and Accessories",
+    "Pet Health Checker from Uploaded Image",
+    "Personalized Yoga Pose Generator from Fitness Goals",
+    "Math Equation Solver from Handwritten Input",
+    "3D Object Creator from Sketch or Image",
+    "Color Palette Generator from Uploaded Image",
+    "Image-to-Story Generator for Children's Books",
+    "Image Generator from Text Description in Regional Language",
+    "Virtual Museum Guide with Image Recognition",
+    "AI Legal Assistant to Explain Laws in Simple Terms",
+    "Document Summarizer for Legal or Research PDFs",
+    "Whiteboard Diagram to Editable PowerPoint Generator",
+    "Dance Move Generator Based on Song Rhythm",
+    "AI Assistant for Gardening using Plant Image",
+    "Image-Based Puzzle Generator for Kids",
+    "AI Companion Bot for Seniors with Face Recognition"
 ]
+
 
 @app.route('/')
 def index():
