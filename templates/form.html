@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Team Registration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        form {
+            background: white;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            width: 450px;
+            max-width: 90vw;
+            animation: scaleUp 0.6s ease forwards;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            font-size: 1.5rem;
+            margin: 15px 0 5px;
+            color: #555;
+            text-align: left;
+        }
+
+        input[type="text"],
+        select,
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 15px 12px;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+            font-weight: 700;
+            color: #222;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        select option[disabled] {
+            color: #aaa;
+        }
+
+        #customProblemDiv {
+            display: none;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes scaleUp {
+            from {transform: scale(0.8); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+    </style>
+
+    <script>
+        function checkProblemSelection() {
+            var problemSelect = document.getElementById('problem');
+            var customDiv = document.getElementById('customProblemDiv');
+            if(problemSelect.value === 'Other') {
+                customDiv.style.display = 'block';
+            } else {
+                customDiv.style.display = 'none';
+            }
+        }
+        window.onload = function() {
+            document.getElementById('problem').addEventListener('change', checkProblemSelection);
+        }
+    </script>
+</head>
+<body>
+    <form action="/submit" method="POST">
+        <h2>Team Registration Form</h2>
+
+        <label>Team Number (1–50)</label>
+        <select name="teamNumber" required>
+            <option value="" disabled selected>Select your team number</option>
+            {% for num in range(1, 51) %}
+                {% if num|string not in taken_teams %}
+                    <option value="{{ num }}">{{ num }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <label>Person 1 Name</label>
+        <input type="text" name="name1" required autocomplete="off" />
+
+        <label>Register Number</label>
+        <input type="text" name="regno1" required autocomplete="off" />
+
+        <label>Person 2 Name</label>
+        <input type="text" name="name2" required autocomplete="off" />
+
+        <label>Register Number</label>
+        <input type="text" name="regno2" required autocomplete="off" />
+
+        <label>Person 3 Name</label>
+        <input type="text" name="name3" required autocomplete="off" />
+
+        <label>Register Number</label>
+        <input type="text" name="regno3" required autocomplete="off" />
+
+        <label>Problem Statement</label>
+        <select name="problem" id="problem" required>
+            <option value="" disabled selected>Select a problem</option>
+            {% for problem in problems %}
+                {% if problem not in taken_problems %}
+                    <option value="{{ problem }}">{{ problem }}</option>
+                {% endif %}
+            {% endfor %}
+            <option value="Other">Other (Type your own problem statement)</option>
+        </select>
+
+        <div id="customProblemDiv">
+            <label>Please type your problem statement:</label>
+            <textarea name="custom_problem" rows="4" placeholder="Type here..."></textarea>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Submission Successful</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap');
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #d4edda;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeInScale 0.8s ease forwards;
+        }
+
+        .container {
+            background: white;
+            padding: 50px 70px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #155724;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 2rem;
+            color: #155724;
+            margin-bottom: 40px;
+        }
+
+        a {
+            font-size: 1.8rem;
+            text-decoration: none;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #19692c;
+        }
+
+        @keyframes fadeInScale {
+            from {opacity: 0; transform: scale(0.8);}
+            to {opacity: 1; transform: scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Success!</h1>
+        <p>Your team registration has been <br><strong>successfully submitted.</strong></p>
+        <a href="/">Submit Another Team</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin - Team Submissions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        a {
+            font-size: 1.6rem;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 700;
+            color: #007BFF;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        table {
+            margin: 30px auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 1200px;
+            font-size: 1.6rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+            font-weight: 900;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f6fc;
+        }
+
+        p {
+            font-size: 1.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Team Submissions</h2>
+    <a href="/logout">Logout</a> |
+    <a href="/download">Download Excel</a> |
+    <a href="/clear" onclick="return confirm('Are you sure you want to delete all data?')">Clear All</a>
+
+    {% if rows %}
+        <table>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in rows %}
+                <tr>
+                    {% for item in row %}
+                        <td>{{ item }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No submissions yet.</p>
+    {% endif %}
+</body>
+</html>
