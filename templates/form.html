@@ -103,6 +103,13 @@
             from {transform: scale(0.8); opacity: 0;}
             to {transform: scale(1); opacity: 1;}
         }
+
+        .error-msg {
+            color: red;
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
     </style>
 
     <script>
@@ -117,6 +124,7 @@
         }
         window.onload = function() {
             document.getElementById('problem').addEventListener('change', checkProblemSelection);
+            checkProblemSelection();
         }
     </script>
 </head>
@@ -124,48 +132,52 @@
     <form action="/submit" method="POST">
         <h2>Team Registration Form</h2>
 
+        {% if error %}
+            <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
         <label>Team Number (1–50)</label>
         <select name="teamNumber" required>
-            <option value="" disabled selected>Select your team number</option>
+            <option value="" disabled {% if not prev_data.teamNumber %}selected{% endif %}>Select your team number</option>
             {% for num in range(1, 51) %}
-                {% if num|string not in taken_teams %}
-                    <option value="{{ num }}">{{ num }}</option>
+                {% if num|string not in taken_teams or prev_data.teamNumber == num|string %}
+                    <option value="{{ num }}" {% if prev_data.teamNumber == num|string %}selected{% endif %}>{{ num }}</option>
                 {% endif %}
             {% endfor %}
         </select>
 
         <label>Person 1 Name</label>
-        <input type="text" name="name1" required autocomplete="off" />
+        <input type="text" name="name1" required autocomplete="off" value="{{ prev_data.name1 or '' }}" />
 
         <label>Register Number</label>
-        <input type="text" name="regno1" required autocomplete="off" />
+        <input type="text" name="regno1" required autocomplete="off" value="{{ prev_data.regno1 or '' }}" />
 
         <label>Person 2 Name</label>
-        <input type="text" name="name2" required autocomplete="off" />
+        <input type="text" name="name2" required autocomplete="off" value="{{ prev_data.name2 or '' }}" />
 
         <label>Register Number</label>
-        <input type="text" name="regno2" required autocomplete="off" />
+        <input type="text" name="regno2" required autocomplete="off" value="{{ prev_data.regno2 or '' }}" />
 
         <label>Person 3 Name</label>
-        <input type="text" name="name3" required autocomplete="off" />
+        <input type="text" name="name3" required autocomplete="off" value="{{ prev_data.name3 or '' }}" />
 
         <label>Register Number</label>
-        <input type="text" name="regno3" required autocomplete="off" />
+        <input type="text" name="regno3" required autocomplete="off" value="{{ prev_data.regno3 or '' }}" />
 
         <label>Problem Statement</label>
         <select name="problem" id="problem" required>
-            <option value="" disabled selected>Select a problem</option>
+            <option value="" disabled {% if not prev_data.problem %}selected{% endif %}>Select a problem</option>
             {% for problem in problems %}
-                {% if problem not in taken_problems %}
-                    <option value="{{ problem }}">{{ problem }}</option>
+                {% if problem not in taken_problems or prev_data.problem == problem %}
+                    <option value="{{ problem }}" {% if prev_data.problem == problem %}selected{% endif %}>{{ problem }}</option>
                 {% endif %}
             {% endfor %}
-            <option value="Other">Other (Type your own problem statement)</option>
+            <option value="Other" {% if prev_data.problem == 'Other' %}selected{% endif %}>Other (Type your own problem statement)</option>
         </select>
 
-        <div id="customProblemDiv">
+        <div id="customProblemDiv" {% if prev_data.problem == 'Other' %}style="display:block"{% else %}style="display:none"{% endif %}>
             <label>Please type your problem statement:</label>
-            <textarea name="custom_problem" rows="4" placeholder="Type here..."></textarea>
+            <textarea name="custom_problem" rows="4" placeholder="Type here...">{{ prev_data.custom_problem or '' }}</textarea>
         </div>
 
         <button type="submit">Submit</button>
